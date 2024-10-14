@@ -1,40 +1,53 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE_NAME = 'scientific_calculator'
-        GITHUB_REPO_URL = 'https://github.com/farmanahmed888/scientific_calculator.git'
-        MAVEN_HOME = '/opt/homebrew/opt/maven'
+        // PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${env.PATH}"
+        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin/docker:${env.PATH}"
 
+
+        DOCKER_IMAGE_NAME = 'scientific_calculator'
+        DOCKER_CREDENTIALS_ID = 'DockerHubCred'
+    }
+    tools {
+        maven 'Maven'  
+        dockerTool 'Docker' 
+        ansible 'Ansible' 
     }
     stages {
         stage('Checkout') {
             steps {
                 script {
-                    // Checkout code from GitHub repository
-                    git branch: 'main', url: "${env.GITHUB_REPO_URL}"
+                    git branch: 'main', url: 'https://github.com/farmanahmed888/scientific_calculator.git'
                 }
             }
         }
         stage('Maven Build') {
-                    steps {
-                        script {
-                            env.PATH = "${env.MAVEN_HOME}/bin:${env.PATH}"
-                            sh 'mvn clean install'
-                        }
-                    }
-                }
-        stage('Build Docker Image') {
             steps {
                 script {
-                    // Build Docker image
-                    sh 'docker build -t scientific_calculator .'
+                    sh 'mvn clean install'
                 }
             }
         }
-        stage('Push Docker Images') {
+        stage('Check Docker Path') {
             steps {
                 script {
-                    // Tag and push Docker image to Docker Hub
+                    sh 'echo $PATH'
+                    sh 'which docker'
+                }
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh 'docker build -t farmanahmed888/scientific_calculator:latest .'
+                    sh "docker images"
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    
                     docker.withRegistry('', 'DockerHubCred') {
                         sh "docker tag scientific_calculator farmanahmed888/scientific_calculator:latest"
                         sh "docker push farmanahmed888/scientific_calculator:latest"
@@ -45,8 +58,7 @@ pipeline {
         stage('Run Ansible Playbook') {
             steps {
                 script {
-                    // Run Ansible playbook
-                    sh "/opt/homebrew/bin/ansible-playbook -i inventory deploy.yml"
+                    sh "ansible-playbook -i inventory deploy.yml"
                 }
             }
         }
