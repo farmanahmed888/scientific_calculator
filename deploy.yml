@@ -6,8 +6,9 @@
   tasks:
     - name: Pull Docker Image
       docker_image:
-        name: "scientific_calculator"
+        name: "farmanahmed888/scientific_calculator"
         source: pull
+        tag: "latest"
       register: docker_pull_result
 
     - name: Display Docker Pull Result
@@ -21,4 +22,4 @@
       when: ansible_facts['os_family'] == "Debian"
 
     - name: Running container
-      shell: /usr/local/bin/docker run -it -d --name scientific_calculates scientific_calculator
+      shell: /usr/local/bin/docker run -it -d --name scientific_calculates farmanahmed888/scientific_calculator:latest
