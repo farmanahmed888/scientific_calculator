@@ -61,6 +61,15 @@ public class MainTest {
         assertEquals(8.0, Math.pow(2, 3));
     }
 
+    @Test
+    public void testCalPowerFunction() {
+        ByteArrayInputStream in = new ByteArrayInputStream("2\n3\n".getBytes());
+        System.setIn(in);
+        Scanner scanner = new Scanner(System.in);
+        Main.calPowerFunction(scanner);
+        assertEquals(16.0, Math.pow(2, 4));
+    }
+
     private int factorial(int n) {
         int result = 1;
         for (int i = 1; i <= n; ++i) {
