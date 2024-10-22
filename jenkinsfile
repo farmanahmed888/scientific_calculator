@@ -1,13 +1,5 @@
 pipeline {
     agent any
-    environment {
-        // PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${env.PATH}"
-        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin/docker:${env.PATH}"
-
-
-        DOCKER_IMAGE_NAME = 'scientific_calculator'
-        DOCKER_CREDENTIALS_ID = 'DockerHubCred'
-    }
     tools {
         maven 'Maven'  
         dockerTool 'Docker' 
@@ -28,28 +20,18 @@ pipeline {
                 }
             }
         }
-        stage('Check Docker Path') {
-            steps {
-                script {
-                    sh 'echo $PATH'
-                    sh 'which docker'
-                }
-            }
-        }
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t farmanahmed888/scientific_calculator:latest .'
-                    sh "docker images"
+                    sh "docker build -t farmanahmed888/scientific_calculator:latest ."
                 }
             }
         }
         stage('Push Docker Image') {
             steps {
                 script {
-                    
-                    docker.withRegistry('', 'DockerHubCred') {
-                        sh "docker tag scientific_calculator farmanahmed888/scientific_calculator:latest"
+                    withDockerRegistry(credentialsId: 'DockerHubCred', toolName: 'Docker') {
+                        // some block
                         sh "docker push farmanahmed888/scientific_calculator:latest"
                     }
                 }
