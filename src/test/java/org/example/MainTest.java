@@ -26,6 +26,15 @@ public class MainTest {
     }
 
     @Test
+    public void testCalFactorial() {
+        ByteArrayInputStream in = new ByteArrayInputStream("5\n".getBytes());
+        System.setIn(in);
+        Scanner scanner = new Scanner(System.in);
+        Main.calFactorial(scanner);
+        assertEquals(720, factorial(6));
+    }
+
+    @Test
     public void testCalNaturalLogarithm() {
         ByteArrayInputStream in = new ByteArrayInputStream("10\n".getBytes());
         System.setIn(in);
