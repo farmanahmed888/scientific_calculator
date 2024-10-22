@@ -26,24 +26,6 @@ public class MainTest {
     }
 
     @Test
-    public void testCalFactorial() {
-        ByteArrayInputStream in = new ByteArrayInputStream("5\n".getBytes());
-        System.setIn(in);
-        Scanner scanner = new Scanner(System.in);
-        Main.calFactorial(scanner);
-        assertEquals(720, factorial(6));
-    }
-
-    @Test
-    public void testCalFactorial() {
-        ByteArrayInputStream in = new ByteArrayInputStream("5\n".getBytes());
-        System.setIn(in);
-        Scanner scanner = new Scanner(System.in);
-        Main.calFactorial(scanner);
-        assertEquals(6, factorial(3));
-    }
-
-    @Test
     public void testCalNaturalLogarithm() {
         ByteArrayInputStream in = new ByteArrayInputStream("10\n".getBytes());
         System.setIn(in);
@@ -59,15 +41,6 @@ public class MainTest {
         Scanner scanner = new Scanner(System.in);
         Main.calPowerFunction(scanner);
         assertEquals(8.0, Math.pow(2, 3));
-    }
-
-    @Test
-    public void testCalPowerFunction() {
-        ByteArrayInputStream in = new ByteArrayInputStream("2\n3\n".getBytes());
-        System.setIn(in);
-        Scanner scanner = new Scanner(System.in);
-        Main.calPowerFunction(scanner);
-        assertEquals(16.0, Math.pow(2, 4));
     }
 
     private int factorial(int n) {
