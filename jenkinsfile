@@ -1,6 +1,7 @@
 pipeline {
     agent any
     tools {
+//tools
         maven 'Maven'  
         dockerTool 'Docker' 
         ansible 'Ansible' 
