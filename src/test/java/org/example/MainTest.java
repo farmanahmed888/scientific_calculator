@@ -31,7 +31,7 @@ public class MainTest {
         System.setIn(in);
         Scanner scanner = new Scanner(System.in);
         Main.calFactorial(scanner);
-        assertEquals(720, factorial(6));
+        assertEquals(6, factorial(3));
     }
 
     @Test
