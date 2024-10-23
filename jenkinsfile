@@ -1,12 +1,21 @@
 pipeline {
     agent any
     tools {
-//tools
         maven 'Maven'  
         dockerTool 'Docker' 
         ansible 'Ansible' 
     }
-    stages {
+    stages{
+        stage('Clean Previous Docker Containers and Images') {
+            steps {
+                script {
+                    sh 'docker stop $(docker ps -a -q) || true'
+                    sh 'docker rm $(docker ps -a -q) || true'
+                    sh 'docker rmi $(docker images -q) || true'
+                }
+            }
+        }
+
         stage('Checkout') {
             steps {
                 script {
@@ -14,6 +23,7 @@ pipeline {
                 }
             }
         }
+
         stage('Maven Build') {
             steps {
                 script {
@@ -21,6 +31,7 @@ pipeline {
                 }
             }
         }
+
         stage('Build Docker Image') {
             steps {
                 script {
@@ -28,16 +39,17 @@ pipeline {
                 }
             }
         }
+
         stage('Push Docker Image') {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'DockerHubCred', toolName: 'Docker') {
-                        // some block
                         sh "docker push farmanahmed888/scientific_calculator:latest"
                     }
                 }
             }
         }
+
         stage('Run Ansible Playbook') {
             steps {
                 script {
